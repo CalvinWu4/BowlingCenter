@@ -1,0 +1,5 @@
+projectKey=bams
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/bams
+ceTaskId=AVuhHOlr4BwSx_-if39V
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVuhHOlr4BwSx_-if39V
