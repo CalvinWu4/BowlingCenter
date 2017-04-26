@@ -43,7 +43,7 @@ class BowlerFile {
 		String data;
 		while ((data = in.readLine()) != null) {
 			// File format is nick\tfname\te-mail
-			String[] bowler = data.split("\t");
+			String[] bowler = data.split("\\s+");
 			if (nickName.equals(bowler[0])) {
 				System.out.println(
 					"Nick: "
@@ -98,7 +98,7 @@ class BowlerFile {
 		String data;
 		while ((data = in.readLine()) != null) {
 			// File format is nick\tfname\te-mail
-			String[] bowler = data.split("\t");
+			String[] bowler = data.split("\\s+");
 			//"Nick: bowler[0] Full: bowler[1] email: bowler[2]
 			allBowlers.add(bowler[0]);
 		}
