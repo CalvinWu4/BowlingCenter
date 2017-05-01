@@ -136,10 +136,10 @@ import View.EndGamePrompt;
 import View.EndGameReport;
 import View.LaneObserver;
 
+import java.time.LocalDateTime;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.HashMap;
-import java.util.Date;
 
 public class Lane extends Thread implements PinsetterObserver {
 	private Party party;
@@ -219,8 +219,8 @@ public class Lane extends Thread implements PinsetterObserver {
 					if (frameNumber == 9){
 						finalScores[bowlIndex][gameNumber] = cumulScores[bowlIndex][9];
 						try{
-						Date date = new Date();
-						String dateString = "" + date.getHours() + ":" + date.getMinutes() + " " + date.getMonth() + "/" + date.getDay() + "/" + (date.getYear() + 1900);
+						LocalDateTime date = LocalDateTime.now();
+						String dateString = "" + date.getHour() + ":" + date.getMinute() + " " + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + (date.getYear());
 						ScoreHistoryFile.addScore(currentThrower.getNick(), dateString, new Integer(cumulScores[bowlIndex][9]).toString());
 						} catch (Exception e) {System.err.println("Exception in addScore. "+ e );} 
 					}
