@@ -3,6 +3,7 @@ package View;/*
  *
  */
 
+import Controller.Lane;
 import Model.Bowler;
 import Model.LaneEvent;
 import Model.Party;

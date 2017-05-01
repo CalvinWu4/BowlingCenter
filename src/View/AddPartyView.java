@@ -25,6 +25,7 @@ package View;/* AddPartyView.java
  *
  */
 
+import Controller.ControlDeskView;
 import Model.Bowler;
 import Model.BowlerFile;
 

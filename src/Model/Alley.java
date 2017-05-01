@@ -20,6 +20,8 @@ package Model;/*
  *
  */
 
+import Controller.ControlDesk;
+
 /**
  *  Class that is the outer container for the bowling sim
  *

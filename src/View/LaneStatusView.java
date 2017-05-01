@@ -6,6 +6,8 @@ package View; /**
  * Window>Preferences>Java>Code Generation.
  */
 
+import Controller.Lane;
+import Controller.Pinsetter;
 import Controller.PinsetterObserver;
 import Model.Bowler;
 import Model.LaneEvent;
