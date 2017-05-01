@@ -1,4 +1,4 @@
-/* $Id$
+package View;/* $Id$
  *
  * Revisions:
  *   $Log: LaneObserver.java,v $
@@ -10,6 +10,8 @@
  *
  *
  */
+
+import Model.LaneEvent;
 
 public interface LaneObserver {
 	public void receiveLaneEvent(LaneEvent le);

@@ -1,3 +1,8 @@
+package Unused;
+
+import Model.Bowler;
+import Model.Party;
+
 import java.util.HashMap;
 
 public interface LaneEventInterface extends java.rmi.Remote {

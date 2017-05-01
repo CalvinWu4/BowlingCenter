@@ -1,4 +1,4 @@
-/* BowlerFile.java
+package Model;/* BowlerFile.java
  *
  *  Version:
  *  		$Id$
@@ -22,7 +22,7 @@
 import java.util.*;
 import java.io.*;
 
-class BowlerFile {
+public class BowlerFile {
 
 	/** The location of the bowelr database */
 	private static String BOWLER_DAT = "BOWLERS.DAT";

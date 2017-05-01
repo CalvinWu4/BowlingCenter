@@ -1,4 +1,4 @@
-/* $Id$
+package Controller;/* $Id$
  *
  * Revisions:
  *   $Log: PinsetterObserver.java,v $
@@ -16,6 +16,8 @@
  *
  */
 
+
+import Model.PinsetterEvent;
 
 public interface PinsetterObserver {
 

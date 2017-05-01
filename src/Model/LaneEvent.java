@@ -1,4 +1,4 @@
-/*  $Id$
+package Model;/*  $Id$
  *
  *  Revisions:
  *    $Log: LaneEvent.java,v $

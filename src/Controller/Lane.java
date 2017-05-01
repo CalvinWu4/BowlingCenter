@@ -1,4 +1,4 @@
-
+package Controller;
 /* $Id$
  *
  * Revisions:
@@ -131,12 +131,17 @@
  * 
  */
 
+import Model.*;
+import View.EndGamePrompt;
+import View.EndGameReport;
+import View.LaneObserver;
+
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Date;
 
-public class Lane extends Thread implements PinsetterObserver {	
+public class Lane extends Thread implements PinsetterObserver {
 	private Party party;
 	private Pinsetter setter;
 	private HashMap scores;
@@ -168,7 +173,7 @@ public class Lane extends Thread implements PinsetterObserver {
 	 * @pre none
 	 * @post a new lane has been created and its thered is executing
 	 */
-	public Lane() { 
+	public Lane() {
 		setter = new Pinsetter();
 		scores = new HashMap();
 		subscribers = new Vector();
@@ -281,7 +286,7 @@ public class Lane extends Thread implements PinsetterObserver {
 			} catch (Exception e) {}
 		}
 	}
-	
+
 	/** recievePinsetterEvent()
 	 * 
 	 * recieves the thrown event from the pinsetter

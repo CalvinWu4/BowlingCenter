@@ -1,4 +1,4 @@
-/* ControlDesk.java
+package Controller;/* ControlDesk.java
  *
  *  Version:
  *  		$Id$
@@ -40,16 +40,18 @@
  *
  */
 
+import Model.*;
+
 import java.util.*;
 import java.io.*;
 
-class ControlDesk extends Thread {
+public class ControlDesk extends Thread {
 
 	/** The collection of Lanes */
 	private HashSet lanes;
 
 	/** The party wait queue */
-	private Queue partyQueue;
+	private Model.Queue partyQueue;
 
 	/** The number of lanes represented */
 	private int numLanes;
@@ -67,7 +69,7 @@ class ControlDesk extends Thread {
 	public ControlDesk(int numLanes) {
 		this.numLanes = numLanes;
 		lanes = new HashSet(numLanes);
-		partyQueue = new Queue();
+		partyQueue = new Model.Queue();
 
 		subscribers = new Vector();
 

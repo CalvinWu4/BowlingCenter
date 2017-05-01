@@ -1,4 +1,4 @@
-/* Queue.java
+package Model;/* Queue.java
  *
  *  Version
  *  $Id$

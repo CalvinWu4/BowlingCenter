@@ -1,4 +1,4 @@
-/*
+package Model;/*
  * Bowler.java
  *
  * Version:

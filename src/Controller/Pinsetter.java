@@ -1,4 +1,4 @@
-/*
+package Controller;/*
  * Pinsetter.java
  *
  * Version:
@@ -70,8 +70,9 @@
  *
  */
 
+import Model.PinsetterEvent;
+
 import java.util.*;
-import java.lang.Boolean;
 
 public class Pinsetter {
 

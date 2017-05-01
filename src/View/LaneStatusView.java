@@ -1,4 +1,4 @@
-/**
+package View; /**
  *
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
@@ -6,11 +6,14 @@
  * Window>Preferences>Java>Code Generation.
  */
 
+import Controller.PinsetterObserver;
+import Model.Bowler;
+import Model.LaneEvent;
+import Model.PinsetterEvent;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
 
 public class LaneStatusView implements ActionListener, LaneObserver, PinsetterObserver {
 

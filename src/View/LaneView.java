@@ -1,7 +1,11 @@
-/*
+package View;/*
  *  constructs a prototype Lane View
  *
  */
+
+import Model.Bowler;
+import Model.LaneEvent;
+import Model.Party;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -122,6 +126,7 @@ public class LaneView implements LaneObserver, ActionListener {
 		return panel;
 	}
 
+	@Override
 	public void receiveLaneEvent(LaneEvent le) {
 		if (lane.isPartyAssigned()) {
 			int numBowlers = le.getParty().getMembers().size();

@@ -1,4 +1,4 @@
-/* ControlDeskView.java
+package Controller;/* ControlDeskView.java
  *
  *  Version:
  *			$Id$
@@ -13,11 +13,14 @@
  *
  */
 
+import Model.ControlDeskEvent;
+import View.AddPartyView;
+import View.LaneStatusView;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 
 import java.util.*;
 

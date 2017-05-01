@@ -1,4 +1,4 @@
-/*
+package Model;/*
  * Alley.java
  *
  * Version:

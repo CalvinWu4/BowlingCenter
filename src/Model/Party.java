@@ -1,4 +1,4 @@
-/*
+package Model;/*
  * Party.java
  *
  * Version:

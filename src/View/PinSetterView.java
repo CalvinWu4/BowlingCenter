@@ -1,4 +1,4 @@
-/*
+package View;/*
  * PinSetterView/.java
  *
  * Version:
@@ -13,8 +13,10 @@
  *
  */
 
+import Controller.PinsetterObserver;
+import Model.PinsetterEvent;
+
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import java.util.Vector;
 
