@@ -136,10 +136,10 @@ import View.EndGamePrompt;
 import View.EndGameReport;
 import View.LaneObserver;
 
+import java.time.LocalDateTime;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.HashMap;
-import java.util.Date;
 
 public class Lane extends Thread implements PinsetterObserver {
 	private static final int LASTFRAME = 9;

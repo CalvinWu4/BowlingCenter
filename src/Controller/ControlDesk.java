@@ -62,7 +62,7 @@ public class ControlDesk extends Thread {
     /**
      * Constructor for the ControlDesk class
      *
-     * @param numlanes	the numbler of lanes to be represented
+     * @param numLanes	the numbler of lanes to be represented
      *
      */
 
