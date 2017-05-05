@@ -52,7 +52,6 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 
         /* Inner Panels */
         JPanel addPartyPanel = getAddPartyPanel(addParty);
-        JPanel assignPanel = getAssignPanel(assign);  // Currently not used.
         JPanel finishedPanel = getFinishedPanel(finished);
 
         /* Outer Panels */
@@ -151,7 +150,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
      * addPartyPanel
      *
      * @param addParty addParty button
-     * @return JPanel addPartyPanel
+     * @return copy of JPanel addPartyPanel
      */
     private JPanel getAddPartyPanel(JButton addParty) {
         JPanel addPartyPanel = new JPanel();
@@ -161,23 +160,10 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
     }
 
     /**
-     * getAssignPanel
-     *
-     * @param assign assign button
-     * @return JPanel assignPanel
-     */
-    private JPanel getAssignPanel(JButton assign) {
-        JPanel assignPanel = new JPanel();
-        assignPanel.setLayout(new FlowLayout());
-        assignPanel.add(assign);
-        return assignPanel;
-    }
-
-    /**
      * getFinishedPanel
      *
      * @param finishedButton finished JButton
-     * @return finishedPanel JPanel
+     * @return copy of finishedPanel JPanel
      */
     private JPanel getFinishedPanel(JButton finishedButton) {
         JPanel finishedPanel = new JPanel();
@@ -191,7 +177,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
      *
      * @param addPartyPanel addPartyPanel JPanel
      * @param finishedPanel finishedPanel JPanel
-     * @return controlsPanel JPanel
+     * @return copy of controlsPanel JPanel
      */
     private JPanel getControlsPanel(JPanel addPartyPanel, JPanel finishedPanel) {
         JPanel controlsPanel = new JPanel();
@@ -207,7 +193,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
      *
      * @param controlDesk ControlDesk
      * @param numLanes    int number of lanes
-     * @return LaneStatusPanel JPanel
+     * @return copy of LaneStatusPanel JPanel
      */
     private JPanel getLaneStatusPanel(ControlDesk controlDesk, int numLanes) {
         JPanel laneStatusPanel = new JPanel();
@@ -244,7 +230,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
      * getPartyPanel
      *
      * @param partyList partyList JList
-     * @return partyPanel JPanel
+     * @return copy of partyPanel JPanel
      */
     private JPanel getPartyPanel(JList partyList) {
         JPanel partyPanel = new JPanel();
@@ -263,7 +249,7 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
      * @param controlsPanel   controls JPanel
      * @param laneStatusPanel lane Status JPanel
      * @param partyPanel      party JPanel
-     * @return ColumnPanel JPanel
+     * @return copy of ColumnPanel JPanel
      */
     private JPanel getColPanel(JPanel controlsPanel, JPanel laneStatusPanel, JPanel partyPanel) {
         JPanel colPanel = new JPanel();
