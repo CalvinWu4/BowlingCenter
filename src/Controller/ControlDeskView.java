@@ -73,13 +73,11 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
      * @param e the ActionEvent that triggered the handler
      */
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(addParty)) {  // Currently not used.
-            AddPartyView addPartyWin = new AddPartyView(this, maxMembers);
-        }
-        if (e.getSource().equals(assign)) {
+        if (e.getSource().equals(addParty)) {
+            new AddPartyView(this, maxMembers);
+        } else if (e.getSource().equals(assign)) {
             controlDesk.assignLane();
-        }
-        if (e.getSource().equals(finished)) {
+        } else if (e.getSource().equals(finished)) {
             win.setVisible(false);
             System.exit(0);
         }
