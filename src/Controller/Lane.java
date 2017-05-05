@@ -137,11 +137,13 @@ import View.EndGameReport;
 import View.LaneObserver;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.HashMap;
 
 public class Lane extends Thread implements PinsetterObserver {
+	private static final int LASTFRAME = 9;
 	private Party party;
 	private Pinsetter setter;
 	private HashMap scores;
@@ -195,97 +197,143 @@ public class Lane extends Thread implements PinsetterObserver {
 	public void run() {
 		
 		while (true) {
-			if (partyAssigned && !gameFinished) {	// we have a party on this lane, 
-								// so next bower can take a throw
+			if (partyAssigned && !gameFinished) {	// we have a party on this lane,
+								// so next bowler can take a throw
 			
-				while (gameIsHalted) {
-					try {
-						sleep(10);
-					} catch (Exception e) {}
+				while (gameIsHalted) {	//lane sleeps if maintenance halts the game
+					waitTen();
 				}
 
-
-				if (bowlerIterator.hasNext()) {
+				if (bowlerIterator.hasNext()) {	//some bowlers haven't bowled the current frame yet
 					currentThrower = (Bowler)bowlerIterator.next();
-
-					canThrowAgain = true;
-					tenthFrameStrike = false;
-					ball = 0;
-					while (canThrowAgain) {
-						setter.ballThrown();		// simulate the thrower's ball hiting
-						ball++;
-					}
-					
-					if (frameNumber == 9){
-						finalScores[bowlIndex][gameNumber] = cumulScores[bowlIndex][9];
-						try{
-						LocalDateTime date = LocalDateTime.now();
-						String dateString = "" + date.getHour() + ":" + date.getMinute() + " " + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + (date.getYear());
-						ScoreHistoryFile.addScore(currentThrower.getNick(), dateString, new Integer(cumulScores[bowlIndex][9]).toString());
-						} catch (Exception e) {System.err.println("Exception in addScore. "+ e );} 
-					}
-
-					
-					setter.reset();
-					bowlIndex++;
-					
-				} else {
-					frameNumber++;
-					resetBowlerIterator();
-					bowlIndex = 0;
-					if (frameNumber > 9) {
-						gameFinished = true;
-						gameNumber++;
-					}
+					bowlFrame();
 				}
-			} else if (partyAssigned && gameFinished) {
-				EndGamePrompt egp = new EndGamePrompt( ((Bowler) party.getMembers().get(0)).getNickName() + "'s Party" );
-				int result = egp.getResult();
-				egp.distroy();
-				egp = null;
-				
-				
-				System.out.println("result was: " + result);
-				
-				// TODO: send record of scores to control desk
-				if (result == 1) {					// yes, want to play again
-					resetScores();
-					resetBowlerIterator();
-					
-				} else if (result == 2) {// no, dont want to play another game
-					Vector printVector;	
-					EndGameReport egr = new EndGameReport( ((Bowler)party.getMembers().get(0)).getNickName() + "'s Party", party);
-					printVector = egr.getResult();
-					partyAssigned = false;
-					Iterator scoreIt = party.getMembers().iterator();
-					party = null;
-					partyAssigned = false;
-					
-					publish(lanePublish());
-					
-					int myIndex = 0;
-					while (scoreIt.hasNext()){
-						Bowler thisBowler = (Bowler)scoreIt.next();
-						ScoreReport sr = new ScoreReport( thisBowler, finalScores[myIndex++], gameNumber );
-						sr.sendEmail(thisBowler.getEmail());
-						Iterator printIt = printVector.iterator();
-						while (printIt.hasNext()){
-							if (thisBowler.getNick() == (String)printIt.next()){
-								System.out.println("Printing " + thisBowler.getNick());
-								sr.sendPrintout();
-							}
-						}
 
-					}
+				else {
+					nextFrame();
 				}
 			}
-			
-			
-			try {
-				sleep(10);
-			} catch (Exception e) {}
+
+			else if (partyAssigned && gameFinished) { endGame();}
+
+			waitTen();
 		}
 	}
+
+	/** recordScores()
+	 *
+	 * Adds the current bowler's score from the current game to the score history file.
+	 */
+	private void recordScore(){
+		finalScores[bowlIndex][gameNumber] = cumulScores[bowlIndex][9];
+		try{
+			Date date = new Date();
+			String dateString = "" + date.getHours() + ":" + date.getMinutes() + " " + date.getMonth() + "/" + date.getDay() + "/" + (date.getYear() + 1900);
+			ScoreHistoryFile.addScore(currentThrower.getNick(), dateString, new Integer(cumulScores[bowlIndex][9]).toString());
+		} catch (Exception e) {System.err.println("Exception in addScore. "+ e );}
+	}
+
+	/** bowlFrame()
+	 *
+	 * simulates a bowler bowling one frame, then tells the pinsetter to reset for the next bowler
+	 * records the score of the bowler if it is the last frame
+	 */
+	private void bowlFrame(){
+		canThrowAgain = true;
+		tenthFrameStrike = false;
+		ball = 0;
+		while (canThrowAgain) {
+			setter.ballThrown();		// simulate the thrower's ball hiting
+			ball++;
+		}
+		if (frameNumber == LASTFRAME){
+			recordScore();
+		}
+
+		setter.reset();
+		bowlIndex++;
+	}
+
+	/** waitForMaintenance()
+	 *
+	 * puts the lane to sleep for 10 milliseconds.
+	 */
+	private void waitTen(){
+		try {
+			sleep(10);
+		} catch (Exception e) {}
+	}
+
+	/** nextFrame()
+	 *
+	 * advances the game to the next frame, moves back to the start of the bowler list.
+	 * sets the game to finished if it is called on the last frame.
+	 */
+	private void nextFrame(){
+		frameNumber++;
+		resetBowlerIterator();
+		bowlIndex = 0;
+		if (frameNumber > LASTFRAME) {
+			gameFinished = true;
+			gameNumber++;
+		}
+	}
+
+	/** endGame()
+	 *
+	 * ends a game on a lane, resets the lane.
+	 * After getting a play again/don't play again response from the EndGamePrompt,
+	 * 	the lane either starts another game with the same party or clears its current party
+	 */
+	private void endGame(){
+		EndGamePrompt egp = new EndGamePrompt( ((Bowler) party.getMembers().get(0)).getNickName() + "'s Party" );
+		int result = egp.getResult();
+		egp.distroy();
+		egp = null;
+
+
+		System.out.println("result was: " + result);
+
+		// TODO: send record of scores to control desk
+		if (result == 1) {					// yes, want to play again
+			resetScores();
+			resetBowlerIterator();
+
+		} else if (result == 2) {// no, dont want to play another game
+			sendReports();
+		}
+	}
+
+    /**sendReports()
+     *
+     * Creates and Emails the bowlers' new score reports to their email addresses.
+     */
+    private void sendReports(){
+        Vector printVector;
+        EndGameReport egr = new EndGameReport( ((Bowler)party.getMembers().get(0)).getNickName() + "'s Party", party);
+        printVector = egr.getResult();
+        partyAssigned = false;
+        Iterator scoreIt = party.getMembers().iterator();
+        party = null;
+
+
+        publish(lanePublish());
+
+        int myIndex = 0;
+        while (scoreIt.hasNext()){
+            Bowler thisBowler = (Bowler)scoreIt.next();
+            ScoreReport sr = new ScoreReport( thisBowler, finalScores[myIndex++], gameNumber );
+            sr.sendEmail(thisBowler.getEmail());
+            Iterator printIt = printVector.iterator();
+            while (printIt.hasNext()){
+                if (thisBowler.getNick() == (String)printIt.next()){
+                    System.out.println("Printing " + thisBowler.getNick());
+                    sr.sendPrintout();
+                }
+            }
+
+        }
+    }
 
 	/** recievePinsetterEvent()
 	 * 

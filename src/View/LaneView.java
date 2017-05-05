@@ -127,7 +127,6 @@ public class LaneView implements LaneObserver, ActionListener {
 		return panel;
 	}
 
-
 	public void receiveLaneEvent(LaneEvent le) {
 		if (lane.isPartyAssigned()) {
 			int numBowlers = le.getParty().getMembers().size();
