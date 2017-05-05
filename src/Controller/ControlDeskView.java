@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * Class representing the control desk.
  */
-public class ControlDeskView implements ActionListener, ControlDeskObserver {
+public class ControlDeskView implements ActionListener, Observer {
 
     private ControlDesk controlDesk;
     private int maxMembers;
@@ -97,8 +97,11 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
      *
      * @param ce the ControlDeskEvent that triggered the handler
      */
-    public void receiveControlDeskEvent(ControlDeskEvent ce) {
-        partyList.setListData(ce.getPartyQueue());
+    public void update(Observable o, Object arg) {
+        if (arg instanceof ControlDeskEvent) {
+            ControlDeskEvent ce = (ControlDeskEvent) arg;
+            partyList.setListData(ce.getPartyQueue());
+        }
     }
 
     /**

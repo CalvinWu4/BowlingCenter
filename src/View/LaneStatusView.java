@@ -8,16 +8,17 @@ package View; /**
 
 import Controller.Lane;
 import Controller.Pinsetter;
-import Controller.PinsetterObserver;
 import Model.Bowler;
 import Model.LaneEvent;
 import Model.PinsetterEvent;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.*;
 
-public class LaneStatusView implements ActionListener, LaneObserver, PinsetterObserver {
+public class LaneStatusView implements ActionListener, Observer {
 
 	private JPanel jp;
 
@@ -137,24 +138,35 @@ public class LaneStatusView implements ActionListener, LaneObserver, PinsetterOb
 		}
 	}
 
-	public void receiveLaneEvent(LaneEvent le) {
-		curBowler.setText( ( (Bowler)le.getBowler()).getNickName() );
-		if ( le.isMechanicalProblem() ) {
-			maintenance.setBackground( Color.RED );
-		}	
-		if ( lane.isPartyAssigned() == false ) {
-			viewLane.setEnabled( false );
-			viewPinSetter.setEnabled( false );
-		} else {
-			viewLane.setEnabled( true );
-			viewPinSetter.setEnabled( true );
-		}
-	}
+//	public void receiveLaneEvent(LaneEvent le) {
+//
+//	}
+//
+//	public void receivePinsetterEvent(PinsetterEvent pe) {
+//
+//
+//	}
 
-	public void receivePinsetterEvent(PinsetterEvent pe) {
-		pinsDown.setText( ( new Integer(pe.totalPinsDown()) ).toString() );
-//		foul.setText( ( new Boolean(pe.isFoulCommited()) ).toString() );
-		
-	}
 
+	public void update(Observable o, Object arg) {
+        if (arg instanceof PinsetterEvent) {
+            PinsetterEvent pe = (PinsetterEvent) arg;
+            pinsDown.setText( ( new Integer(pe.totalPinsDown()) ).toString() );
+
+        } else if (arg instanceof LaneEvent) {
+
+            LaneEvent le = (LaneEvent) arg;
+            curBowler.setText( ( (Bowler)le.getBowler()).getNickName() );
+            if ( le.isMechanicalProblem() ) {
+                maintenance.setBackground( Color.RED );
+            }
+            if ( lane.isPartyAssigned() == false ) {
+                viewLane.setEnabled( false );
+                viewPinSetter.setEnabled( false );
+            } else {
+                viewLane.setEnabled( true );
+                viewPinSetter.setEnabled( true );
+            }
+        }
+	}
 }

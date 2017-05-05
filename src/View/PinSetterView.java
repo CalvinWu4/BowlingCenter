@@ -13,15 +13,17 @@ package View;/*
  *
  */
 
-import Controller.PinsetterObserver;
+//import Controller.PinsetterObserver;
 import Model.PinsetterEvent;
 
 import java.awt.*;
 import javax.swing.*;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
 
-public class PinSetterView implements PinsetterObserver {
+public class PinSetterView implements Observer {
 
 
     private Vector pinVect = new Vector ( );
@@ -175,38 +177,43 @@ public class PinSetterView implements PinsetterObserver {
     }
     
     
-    /**
-     * This method receives a pinsetter event.  The event is the current
-     * state of the PinSetter and the method changes how the GUI looks
-     * accordingly.  When pins are "knocked down" the corresponding label
-     * is grayed out.  When it is the second roll, it is indicated by the
-     * appearance of a second yellow box at the top.
-     *
-     * @param e    The state of the pinsetter is sent in this event.
-     */
-    
+//    /**
+//     * This method receives a pinsetter event.  The event is the current
+//     * state of the PinSetter and the method changes how the GUI looks
+//     * accordingly.  When pins are "knocked down" the corresponding label
+//     * is grayed out.  When it is the second roll, it is indicated by the
+//     * appearance of a second yellow box at the top.
+//     *
+//     * @param e    The state of the pinsetter is sent in this event.
+//     */
+//    public void receivePinsetterEvent(PinsetterEvent pe){
+//
+//    }
 
-    public void receivePinsetterEvent(PinsetterEvent pe){
-	if ( !(pe.isFoulCommited()) ) {
-	    	JLabel tempPin = new JLabel ( );
-	    	for ( int c = 0; c < 10; c++ ) {
-				boolean pin = pe.pinKnockedDown ( c );
-				tempPin = (JLabel)pinVect.get ( c );
-				if ( pin ) {
-		    		tempPin.setForeground ( Color.lightGray );
-				}
-	    	}
-    	}
-		if ( pe.getThrowNumber() == 1 ) {
-	   		 secondRoll.setBackground ( Color.yellow );
-		}
-	if ( pe.pinsDownOnThisThrow() == -1) {
-		for ( int i = 0; i != 10; i++){
-			((JLabel)pinVect.get(i)).setForeground(Color.black);
-		}
-		secondRoll.setBackground( Color.black);
+	public void update(Observable o, Object arg) {
+        if (arg instanceof PinsetterEvent) {
+            PinsetterEvent pe = (PinsetterEvent) arg;
+            if ( !(pe.isFoulCommited()) ) {
+                JLabel tempPin = new JLabel();
+                for ( int c = 0; c < 10; c++ ) {
+                    boolean pin = pe.pinKnockedDown ( c );
+                    tempPin = (JLabel)pinVect.get ( c );
+                    if ( pin ) {
+                        tempPin.setForeground ( Color.lightGray );
+                    }
+                }
+            }
+            if ( pe.getThrowNumber() == 1 ) {
+                secondRoll.setBackground ( Color.yellow );
+            }
+            if ( pe.pinsDownOnThisThrow() == -1) {
+                for ( int i = 0; i != 10; i++){
+                    ((JLabel)pinVect.get(i)).setForeground(Color.black);
+                }
+                secondRoll.setBackground( Color.black);
+            }
+        }
 	}
-    }
     
     public void show() {
     	frame.show();
@@ -219,5 +226,6 @@ public class PinSetterView implements PinsetterObserver {
     public static void main ( String args [ ] ) {
 		PinSetterView pg = new PinSetterView ( 1 );
     }
-    
+
+
 }
