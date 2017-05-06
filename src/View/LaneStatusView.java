@@ -138,16 +138,6 @@ public class LaneStatusView implements ActionListener, Observer {
 		}
 	}
 
-//	public void receiveLaneEvent(LaneEvent le) {
-//
-//	}
-//
-//	public void receivePinsetterEvent(PinsetterEvent pe) {
-//
-//
-//	}
-
-
 	public void update(Observable o, Object arg) {
         if (arg instanceof PinsetterEvent) {
             PinsetterEvent pe = (PinsetterEvent) arg;

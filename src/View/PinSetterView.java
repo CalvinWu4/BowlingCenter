@@ -13,7 +13,6 @@ package View;/*
  *
  */
 
-//import Controller.PinsetterObserver;
 import Model.PinsetterEvent;
 
 import java.awt.*;
@@ -175,21 +174,17 @@ public class PinSetterView implements Observer {
 	
 //	frame.show();
     }
-    
-    
-//    /**
-//     * This method receives a pinsetter event.  The event is the current
-//     * state of the PinSetter and the method changes how the GUI looks
-//     * accordingly.  When pins are "knocked down" the corresponding label
-//     * is grayed out.  When it is the second roll, it is indicated by the
-//     * appearance of a second yellow box at the top.
-//     *
-//     * @param e    The state of the pinsetter is sent in this event.
-//     */
-//    public void receivePinsetterEvent(PinsetterEvent pe){
-//
-//    }
 
+
+	/**
+     * This method receives a pinsetter event.  The event is the current
+     * state of the PinSetter and the method changes how the GUI looks
+     * accordingly.  When pins are "knocked down" the corresponding label
+     * is grayed out.  When it is the second roll, it is indicated by the
+     * appearance of a second yellow box at the top.
+     * @param o
+     * @param arg    The state of the pinsetter is sent in this event.
+     */
 	public void update(Observable o, Object arg) {
         if (arg instanceof PinsetterEvent) {
             PinsetterEvent pe = (PinsetterEvent) arg;
