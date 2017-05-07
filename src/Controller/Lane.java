@@ -485,13 +485,38 @@ public class Lane extends Thread implements Observer {
      */
     private int getScore(Bowler Cur, int frame) {
         int[] curScore;
-        int strikeballs = 0;
         int totalScore = 0;
         curScore = (int[]) scores.get(Cur);
         for (int i = 0; i != 10; i++) {
             cumulScores[bowlIndex][i] = 0;
         }
         int current = 2 * (frame - 1) + ball - 1;
+
+
+        ScoreState state;
+        ScoreContext context = new ScoreContext();
+
+        for (int i = 0; i != current + 2; i++) {
+            //Spare:
+            if (i % 2 == 1 && curScore[i - 1] + curScore[i] == 10 && i < current - 1 && i < 19) {
+                state = new SpareState(context);
+            }
+            else if (i < current && i % 2 == 0 && curScore[i] == 10 && i < 18) {
+                state = new StrikeState(context);
+            }
+            else{
+                state = new NormThrowState(context);
+            }
+
+            context.getState().handle(curScore, i, cumulScores, bowlIndex, current);
+
+            curScore = context.getState().getCurScore();
+            cumulScores = context.getState().getCumulScores();
+            current = context.getState().getCurrent();
+            bowlIndex = context.getState().getBowlIndex();
+            }
+
+/*
         //Iterate through each ball until the current one.
         for (int i = 0; i != current + 2; i++) {
             //Spare:
@@ -585,7 +610,7 @@ public class Lane extends Thread implements Observer {
                     }
                 }
             }
-        }
+        }*/
         return totalScore;
     }
 
