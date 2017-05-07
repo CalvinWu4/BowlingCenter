@@ -45,7 +45,7 @@ import Model.*;
 import java.util.*;
 import java.io.*;
 
-public class ControlDesk implements Runnable {
+public class ControlDesk extends Subject implements Runnable {
 
     /** The collection of Lanes */
     private HashSet lanes;
@@ -209,13 +209,14 @@ public class ControlDesk implements Runnable {
     }
 
     /**
-     * Broadcast an event to subscribing objects.
+     * publish
      *
-     * @param event    the ControlDeskEvent to broadcast
+     * Method that publishes an event to subscribers
      *
+     * @param event Event that is to be published
      */
 
-    public void publish(ControlDeskEvent event) {
+    public void publish(Event event) {
         Iterator eventIterator = subscribers.iterator();
         while (eventIterator.hasNext()) {
             ((Observer) eventIterator.next()).update(null, event);

@@ -15,7 +15,7 @@ package Model;/* ControlDeskEvent.java
 
 import java.util.*;
 
-public class ControlDeskEvent {
+public class ControlDeskEvent implements Event{
 
 	/** A representation of the wait queue, containing party names */
 	private Vector partyQueue;

@@ -70,11 +70,12 @@ package Controller;/*
  *
  */
 
+import Model.Event;
 import Model.PinsetterEvent;
 
 import java.util.*;
 
-public class Pinsetter {
+public class Pinsetter extends Subject{
 
 	private Random rnd;
 	private Vector subscribers;
@@ -93,17 +94,22 @@ public class Pinsetter {
 	private int throwNumber;
 
 	/** sendEvent()
-	 * 
+	 *
 	 * Sends pinsetter events to all subscribers
-	 * 
+	 *
 	 * @pre none
 	 * @post all subscribers have recieved pinsetter event with updated state
 	 * */
-	private void sendEvent(int jdpins) {	// send events when our state is changd
-		for (int i=0; i < subscribers.size(); i++) {
-			((Observer)subscribers.get(i)).update(null,
-				new PinsetterEvent(pins, foul, throwNumber, jdpins));
+	public void publish(Event event) {	// send events when our state is changd
+//		for (int i=0; i < subscribers.size(); i++) {
+//			((Observer)subscribers.get(i)).update(null,
+//				new PinsetterEvent(pins, foul, throwNumber, jdpins));
+//		}
+		Iterator eventIterator = subscribers.iterator();
+		while (eventIterator.hasNext()) {
+			((Observer) eventIterator.next()).update(null, event);
 		}
+
 	}
 
 	/** Pinsetter()
@@ -152,7 +158,7 @@ public class Pinsetter {
 			Thread.sleep(500);				// pinsetter is where delay will be in a real game
 		} catch (Exception e) {}
 
-		sendEvent(count);
+		publish(count);
 
 		throwNumber++;
 	}
@@ -173,7 +179,7 @@ public class Pinsetter {
 			Thread.sleep(1000);
 		} catch (Exception e) {}
 		
-		sendEvent(-1);
+		publish(-1);
 	}
 
 	/** resetPins()

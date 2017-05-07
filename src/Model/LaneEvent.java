@@ -25,7 +25,7 @@ package Model;/*  $Id$
 
 import java.util.HashMap;
 
-public class LaneEvent {
+public class LaneEvent implements Event{
 
 	private Party p;
 	int frame;

@@ -12,7 +12,7 @@ package Model;/*  $Id$
  *
  */
 
-public class PinsetterEvent {
+public class PinsetterEvent implements Event{
 
 	private boolean[] pinsStillStanding;
 	private boolean foulCommited;

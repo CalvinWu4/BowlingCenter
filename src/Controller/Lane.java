@@ -137,12 +137,11 @@ import View.EndGameReport;
 
 import java.util.*;
 
-public class Lane extends Thread implements Observer {
+public class Lane extends Subject {
     private static final int LASTFRAME = 9;
     private Party party;
     private Pinsetter setter;
     private HashMap scores;
-    private Vector subscribers;
 
     private boolean gameIsHalted;
 
@@ -321,7 +320,7 @@ public class Lane extends Thread implements Observer {
         party = null;
 
 
-        publish(lanePublish());
+        publish(createLaneEvent());
 
         int myIndex = 0;
         while (scoreIt.hasNext()) {
@@ -358,21 +357,21 @@ public class Lane extends Thread implements Observer {
 
                     if ((pe.totalPinsDown() != 10) && (pe.getThrowNumber() == 2 && tenthFrameStrike == false)) {
                         canThrowAgain = false;
-                        //publish( lanePublish() );
+                        //publish( createLaneEvent() );
                     }
 
                     if (pe.getThrowNumber() == 3) {
                         canThrowAgain = false;
-                        //publish( lanePublish() );
+                        //publish( createLaneEvent() );
                     }
                 } else { // its not the 10th frame
 
                     if (pe.pinsDownOnThisThrow() == 10) {        // threw a strike
                         canThrowAgain = false;
-                        //publish( lanePublish() );
+                        //publish( createLaneEvent() );
                     } else if (pe.getThrowNumber() == 2) {
                         canThrowAgain = false;
-                        //publish( lanePublish() );
+                        //publish( createLaneEvent() );
                     } else if (pe.getThrowNumber() == 3)
                         System.out.println("I'm here...");
                 }
@@ -459,19 +458,18 @@ public class Lane extends Thread implements Observer {
         curScore[index - 1] = score;
         scores.put(Cur, curScore);
         getScore(Cur, frame);
-        publish(lanePublish());
+        publish(createLaneEvent());
     }
 
     /**
-     * lanePublish()
+     * createLaneEvent()
      * <p>
      * Method that creates and returns a newly created laneEvent
      *
      * @return The new lane event
      */
-    private LaneEvent lanePublish() {
-        LaneEvent laneEvent = new LaneEvent(party, bowlIndex, currentThrower, cumulScores, scores, frameNumber + 1, curScores, ball, gameIsHalted);
-        return laneEvent;
+    private LaneEvent createLaneEvent() {
+        return new LaneEvent(party, bowlIndex, currentThrower, cumulScores, scores, frameNumber + 1, curScores, ball, gameIsHalted);
     }
 
     /**
@@ -516,101 +514,6 @@ public class Lane extends Thread implements Observer {
             bowlIndex = context.getState().getBowlIndex();
             }
 
-/*
-        //Iterate through each ball until the current one.
-        for (int i = 0; i != current + 2; i++) {
-            //Spare:
-            if (i % 2 == 1 && curScore[i - 1] + curScore[i] == 10 && i < current - 1 && i < 19) {
-                //This ball was a the second of a spare.
-                //Also, we're not on the current ball.
-                //Add the next ball to the ith one in cumul.
-                cumulScores[bowlIndex][(i / 2)] += curScore[i + 1] + curScore[i];
-                if (i > 1) {
-                    //cumulScores[bowlIndex][i/2] += cumulScores[bowlIndex][i/2 -1];
-                }
-            } else if (i < current && i % 2 == 0 && curScore[i] == 10 && i < 18) {
-                strikeballs = 0;
-                //This ball is the first ball, and was a strike.
-                //If we can get 2 balls after it, good add them to cumul.
-                if (curScore[i + 2] != -1) {
-                    strikeballs = 1;
-                    if (curScore[i + 3] != -1) {
-                        //Still got em.
-                        strikeballs = 2;
-                    } else if (curScore[i + 4] != -1) {
-                        //Ok, got it.
-                        strikeballs = 2;
-                    }
-                }
-                if (strikeballs == 2) {
-                    //Add up the strike.
-                    //Add the next two balls to the current cumulscore.
-                    cumulScores[bowlIndex][i / 2] += 10;
-                    if (curScore[i + 1] != -1) {
-                        cumulScores[bowlIndex][i / 2] += curScore[i + 1] + cumulScores[bowlIndex][(i / 2) - 1];
-                        if (curScore[i + 2] != -1) {
-                            if (curScore[i + 2] != -2) {
-                                cumulScores[bowlIndex][(i / 2)] += curScore[i + 2];
-                            }
-                        } else {
-                            if (curScore[i + 3] != -2) {
-                                cumulScores[bowlIndex][(i / 2)] += curScore[i + 3];
-                            }
-                        }
-                    } else {
-                        if (i / 2 > 0) {
-                            cumulScores[bowlIndex][i / 2] += curScore[i + 2] + cumulScores[bowlIndex][(i / 2) - 1];
-                        } else {
-                            cumulScores[bowlIndex][i / 2] += curScore[i + 2];
-                        }
-                        if (curScore[i + 3] != -1) {
-                            if (curScore[i + 3] != -2) {
-                                cumulScores[bowlIndex][(i / 2)] += curScore[i + 3];
-                            }
-                        } else {
-                            cumulScores[bowlIndex][(i / 2)] += curScore[i + 4];
-                        }
-                    }
-                } else {
-                    break;
-                }
-            } else {
-                //We're dealing with a normal throw, add it and be on our way.
-                if (i % 2 == 0 && i < 18) {
-                    if (i / 2 == 0) {
-                        //First frame, first ball.  Set his cumul score to the first ball
-                        if (curScore[i] != -2) {
-                            cumulScores[bowlIndex][i / 2] += curScore[i];
-                        }
-                    } else if (i / 2 != 9) {
-                        //add his last frame's cumul to this ball, make it this frame's cumul.
-                        if (curScore[i] != -2) {
-                            cumulScores[bowlIndex][i / 2] += cumulScores[bowlIndex][i / 2 - 1] + curScore[i];
-                        } else {
-                            cumulScores[bowlIndex][i / 2] += cumulScores[bowlIndex][i / 2 - 1];
-                        }
-                    }
-                } else if (i < 18) {
-                    if (curScore[i] != -1 && i > 2) {
-                        if (curScore[i] != -2) {
-                            cumulScores[bowlIndex][i / 2] += curScore[i];
-                        }
-                    }
-                }
-                if (i / 2 == 9) {
-                    if (i == 18) {
-                        cumulScores[bowlIndex][9] += cumulScores[bowlIndex][8];
-                    }
-                    if (curScore[i] != -2) {
-                        cumulScores[bowlIndex][9] += curScore[i];
-                    }
-                } else if (i / 2 == 10) {
-                    if (curScore[i] != -2) {
-                        cumulScores[bowlIndex][9] += curScore[i];
-                    }
-                }
-            }
-        }*/
         return totalScore;
     }
 
@@ -625,63 +528,6 @@ public class Lane extends Thread implements Observer {
         return partyAssigned;
     }
 
-    /**
-     * isGameFinished
-     *
-     * @return true if the game is done, false otherwise
-     */
-    public boolean isGameFinished() {
-        return gameFinished;
-    }
-
-    /**
-     * subscribe
-     * <p>
-     * Method that will add a subscriber
-     *
-     * @param adding Observer that is to be added
-     */
-
-    public void subscribe(Observer adding) {
-        subscribers.add(adding);
-    }
-
-    /**
-     * unsubscribe
-     * <p>
-     * Method that unsubscribes an observer from this object
-     *
-     * @param removing The observer to be removed
-     */
-
-    public void unsubscribe(Observer removing) {
-        subscribers.remove(removing);
-    }
-
-    /**
-     * publish
-     * <p>
-     * Method that publishes an event to subscribers
-     *
-     * @param event Event that is to be published
-     */
-
-    public void publish(LaneEvent event) {
-        if (subscribers.size() > 0) {
-            Iterator eventIterator = subscribers.iterator();
-
-            while (eventIterator.hasNext()) {
-                ((Observer) eventIterator.next()).update(null, event);
-            }
-        }
-    }
-
-    /**
-     * Accessor to get this Lane's pinsetter
-     *
-     * @return A reference to this lane's pinsetter
-     */
-
     public Pinsetter getPinsetter() {
         return setter;
     }
@@ -691,7 +537,7 @@ public class Lane extends Thread implements Observer {
      */
     public void pauseGame() {
         gameIsHalted = true;
-        publish(lanePublish());
+        publish(createLaneEvent());
     }
 
     /**
@@ -699,6 +545,6 @@ public class Lane extends Thread implements Observer {
      */
     public void unPauseGame() {
         gameIsHalted = false;
-        publish(lanePublish());
+        publish(createLaneEvent());
     }
 }
