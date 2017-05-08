@@ -135,7 +135,6 @@ import Model.*;
 import View.EndGamePrompt;
 import View.EndGameReport;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class Lane extends Thread implements Observer, Subject {
@@ -224,8 +223,8 @@ public class Lane extends Thread implements Observer, Subject {
     private void recordScore() {
         finalScores[bowlIndex][gameNumber] = cumulScores[bowlIndex][9];
         try {
-            LocalDateTime date = LocalDateTime.now();
-            String dateString = "" + date.getHour() + ":" + date.getMinute() + " " + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + (date.getYear());
+            Date date = new Date();
+            String dateString = "" + date.getHours() + ":" + date.getMinutes() + " " + date.getMonth() + "/" + date.getDay() + "/" + (date.getYear() + 1900);
             ScoreHistoryFile.addScore(currentThrower.getNick(), dateString, new Integer(cumulScores[bowlIndex][9]).toString());
         } catch (Exception e) {
             System.err.println("Exception in addScore. " + e);
