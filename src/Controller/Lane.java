@@ -135,13 +135,15 @@ import Model.*;
 import View.EndGamePrompt;
 import View.EndGameReport;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
-public class Lane extends Subject {
+public class Lane extends Thread implements Observer, Subject {
     private static final int LASTFRAME = 9;
     private Party party;
     private Pinsetter setter;
     private HashMap scores;
+    private Vector subscribers;
 
     private boolean gameIsHalted;
 
@@ -222,8 +224,8 @@ public class Lane extends Subject {
     private void recordScore() {
         finalScores[bowlIndex][gameNumber] = cumulScores[bowlIndex][9];
         try {
-            Date date = new Date();
-            String dateString = "" + date.getHours() + ":" + date.getMinutes() + " " + date.getMonth() + "/" + date.getDay() + "/" + (date.getYear() + 1900);
+            LocalDateTime date = LocalDateTime.now();
+            String dateString = "" + date.getHour() + ":" + date.getMinute() + " " + date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + (date.getYear());
             ScoreHistoryFile.addScore(currentThrower.getNick(), dateString, new Integer(cumulScores[bowlIndex][9]).toString());
         } catch (Exception e) {
             System.err.println("Exception in addScore. " + e);
@@ -527,6 +529,63 @@ public class Lane extends Subject {
     public boolean isPartyAssigned() {
         return partyAssigned;
     }
+
+    /**
+     * isGameFinished
+     *
+     * @return true if the game is done, false otherwise
+     */
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    /**
+     * subscribe
+     * <p>
+     * Method that will add a subscriber
+     *
+     * @param adding Observer that is to be added
+     */
+
+    public void subscribe(Observer adding) {
+        subscribers.add(adding);
+    }
+
+    /**
+     * unsubscribe
+     * <p>
+     * Method that unsubscribes an observer from this object
+     *
+     * @param removing The observer to be removed
+     */
+
+    public void unsubscribe(Observer removing) {
+        subscribers.remove(removing);
+    }
+
+    /**
+     * publish
+     * <p>
+     * Method that publishes an event to subscribers
+     *
+     * @param event Event that is to be published
+     */
+
+    public void publish(Event event) {
+        if (subscribers.size() > 0) {
+            Iterator eventIterator = subscribers.iterator();
+
+            while (eventIterator.hasNext()) {
+                ((Observer) eventIterator.next()).update(null, event);
+            }
+        }
+    }
+
+    /**
+     * Accessor to get this Lane's pinsetter
+     *
+     * @return A reference to this lane's pinsetter
+     */
 
     public Pinsetter getPinsetter() {
         return setter;

@@ -75,7 +75,7 @@ import Model.PinsetterEvent;
 
 import java.util.*;
 
-public class Pinsetter extends Subject{
+public class Pinsetter implements Subject {
 
 	private Random rnd;
 	private Vector subscribers;
@@ -93,24 +93,34 @@ public class Pinsetter extends Subject{
 	private boolean foul;
 	private int throwNumber;
 
-	/** sendEvent()
-	 *
-	 * Sends pinsetter events to all subscribers
-	 *
-	 * @pre none
-	 * @post all subscribers have recieved pinsetter event with updated state
-	 * */
-	public void publish(Event event) {	// send events when our state is changd
-//		for (int i=0; i < subscribers.size(); i++) {
-//			((Observer)subscribers.get(i)).update(null,
-//				new PinsetterEvent(pins, foul, throwNumber, jdpins));
-//		}
-		Iterator eventIterator = subscribers.iterator();
-		while (eventIterator.hasNext()) {
-			((Observer) eventIterator.next()).update(null, event);
-		}
+    /**
+     * createPinsetterEvent()
+     * <p>
+     * Method that creates and returns a newly created pinsetterEvent
+     *
+     * @return The new pinsetter event
+     */
+    private PinsetterEvent createPinsetterEvent(int jdpins) { /// send events when our state is changed
+        return new PinsetterEvent(pins, foul, throwNumber, jdpins);
+    }
 
-	}
+    /**
+     * publish
+     * <p>
+     * Method that publishes an event to subscribers
+     *
+     * @param event Event that is to be published
+     */
+
+    public void publish(Event event) {
+        if (subscribers.size() > 0) {
+            Iterator eventIterator = subscribers.iterator();
+
+            while (eventIterator.hasNext()) {
+                ((Observer) eventIterator.next()).update(null, event);
+            }
+        }
+    }
 
 	/** Pinsetter()
 	 * 
@@ -158,7 +168,7 @@ public class Pinsetter extends Subject{
 			Thread.sleep(500);				// pinsetter is where delay will be in a real game
 		} catch (Exception e) {}
 
-		publish(count);
+		publish(createPinsetterEvent(count));
 
 		throwNumber++;
 	}
@@ -179,7 +189,7 @@ public class Pinsetter extends Subject{
 			Thread.sleep(1000);
 		} catch (Exception e) {}
 		
-		publish(-1);
+		publish(createPinsetterEvent(-1));
 	}
 
 	/** resetPins()

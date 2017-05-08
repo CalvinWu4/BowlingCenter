@@ -45,7 +45,7 @@ import Model.*;
 import java.util.*;
 import java.io.*;
 
-public class ControlDesk extends Subject implements Runnable {
+public class ControlDesk implements Runnable, Subject{
 
     /** The collection of Lanes */
     private HashSet lanes;
