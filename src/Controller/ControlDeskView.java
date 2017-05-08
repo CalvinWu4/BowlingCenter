@@ -94,8 +94,8 @@ public class ControlDeskView implements ActionListener, Observer {
 
     /**
      * Receive a broadcast from a ControlDesk
-     *
-     * @param ce the ControlDeskEvent that triggered the handler
+     * @param o
+     * @param arg the ControlDeskEvent that triggered the handler
      */
     public void update(Observable o, Object arg) {
         if (arg instanceof ControlDeskEvent) {

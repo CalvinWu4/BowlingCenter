@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Lucky-Strikes-Bowling-Center-BAMS:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Lucky_Strikes_Bowling_Center_BAMS_jar</output-path>
+    <root id="archive" name="Lucky-Strikes-Bowling-Center-BAMS.jar">
+      <element id="module-output" name="Lucky-Strikes-Bowling-Center-BAMS" />
+    </root>
+  </artifact>
+</component>
